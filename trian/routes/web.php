@@ -16,3 +16,10 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->get('test', 'ExampleController@test');
+$router->get('read', 'indexcontroller@read');
+$router->get('find', 'indexcontroller@findId');
+$router->post('create', 'indexcontroller@create');
+$router->put('update/{id}', 'indexcontroller@update');
+$router->delete('delete/{id}', 'indexcontroller@delete');

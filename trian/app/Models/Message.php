@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Message extends Model
 {
+    public $timestamps = false;
     protected $table = 'messages'; // Tên của bảng
     
         protected $fillable = ['eventname', 'desribe', 'eventdate', 'template_id'];

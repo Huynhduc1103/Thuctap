@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Logs extends Model
 {
+    public $timestamps = false;
     protected $table = 'logs'; // Tên của bảng
 
     protected $fillable = ['user_id', 'message_id', 'senddate', 'status_id'];

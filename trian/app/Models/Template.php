@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Template extends Model
 {
     protected $table = 'templates'; // Tên của bảng
-    
+    public $timestamps = false;
         protected $fillable = ['notification', 'content'];
     
         public function message()
