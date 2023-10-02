@@ -23,3 +23,15 @@ $router->get('find', 'indexcontroller@findId');
 $router->post('create', 'indexcontroller@create');
 $router->put('update/{id}', 'indexcontroller@update');
 $router->delete('delete/{id}', 'indexcontroller@delete');
+
+$router->get('/searchuser', 'SearchController@searchByUser');
+$router->get('/searchtemplate', 'SearchController@searchByTemplade');
+$router->get('/searchtempstatus', 'SearchController@searchByStatus');
+$router->get('/searchmessage', 'SearchController@searchByMessage');
+$router->get('/searchlogs', 'SearchController@searchByLogs');
+
+$router->get('/pagintionuser', 'PaginationController@PagintionUser');
+$router->get('/pagintiontemplate', 'PaginationController@PagintionTemplate');
+$router->get('/pagintionstatus', 'PaginationController@PagintionStatus');
+$router->get('/pagintionmessage', 'PaginationController@PagintionMessage');
+$router->get('/pagintionlogs', 'PaginationController@PagintionLogs');
