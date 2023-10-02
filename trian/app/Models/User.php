@@ -18,16 +18,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'email',
-    ];
-
-    /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password',
-    ];
+        protected $table = 'users'; // Tên của bảng
+    
+        protected $fillable = ['email', 'password', 'phone', 'birthday'];
+    
+        public function logs()
+        {
+            return $this->hasMany(Log::class, 'user_id', 'id'); // Quan hệ one-to-many: Một người dùng có nhiều logs
+        }
 }
