@@ -21,7 +21,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public $timestamps = false;
         protected $table = 'users'; // Tên của bảng
     
-        protected $fillable = ['email', 'password', 'phone', 'birthday'];
+        protected $fillable = ['fullname', 'email', 'password', 'phone', 'birthday', 'groupcode'];
     
         public function logs()
         {

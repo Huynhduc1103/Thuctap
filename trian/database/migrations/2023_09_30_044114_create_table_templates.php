@@ -15,9 +15,15 @@ class CreateTableTemplates extends Migration
     {
         Schema::create('templates', function (Blueprint $table) {
             $table->id();
-            $table->String('notification');
-            $table->String('content');
-            //$table->timestamps();
+            $table->string('notification');
+            $table->datetime('timer');
+            $table->string('type');
+            $table->string('data');
+            $table->unsignedBigInteger('message_id'); // Định nghĩa kiểu dữ liệu và tên cột
+            $table->foreign('message_id')
+            ->references('id')
+            ->on('messages')
+            ->onDelete('cascade'); // onDelete('cascade') sẽ xóa tất cả bản ghi con khi bản ghi cha bị xóa
         });
     }
 

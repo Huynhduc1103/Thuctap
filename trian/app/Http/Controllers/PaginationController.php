@@ -21,11 +21,6 @@ class PaginationController extends Controller
         $template = Template::paginate(5);
         return response()->json(['template' => $template], 200);
     }
-    public function PagintionStatus()
-    {
-        $status = Status::paginate(5);
-        return response()->json(['status' => $status], 200);
-    }
     public function PagintionMessage()
     {
         $message = Message::paginate(5);

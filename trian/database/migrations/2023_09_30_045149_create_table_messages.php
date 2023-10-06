@@ -18,13 +18,7 @@ class CreateTableMessages extends Migration
             $table->string('eventname');
             $table->string('desribe');
             $table->date('eventdate');
-            // Định nghĩa cột chứa khóa ngoại
-            $table->unsignedBigInteger('template_id'); // Định nghĩa kiểu dữ liệu và tên cột
-            $table->foreign('template_id')
-            ->references('id')
-            ->on('templates')
-            ->onDelete('cascade'); // onDelete('cascade') sẽ xóa tất cả bản ghi con khi bản ghi cha bị xóa
-            // $table->timestamps();
+            $table->string('type');
         });
     }
 
