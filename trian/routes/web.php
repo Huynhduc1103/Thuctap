@@ -34,3 +34,6 @@ $router->get('/pagintionuser', 'PaginationController@PagintionUser');
 $router->get('/pagintiontemplate', 'PaginationController@PagintionTemplate');
 $router->get('/pagintionmessage', 'PaginationController@PagintionMessage');
 $router->get('/pagintionlogs', 'PaginationController@PagintionLogs');
+
+
+$router->get('/sendsms', 'sendSMS@sendSms');
