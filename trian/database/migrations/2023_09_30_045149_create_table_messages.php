@@ -15,9 +15,7 @@ class CreateTableMessages extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
-            $table->string('eventname');
-            $table->string('desribe');
-            $table->date('eventdate');
+            $table->string('messagetype'); // sinh nhat va su kien
             $table->string('type');
         });
     }
@@ -29,6 +27,6 @@ class CreateTableMessages extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('table_messages');
+        Schema::dropIfExists('messages');
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddBirthdateColumn extends Migration
+class CreateTableEvents extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,11 @@ class AddBirthdateColumn extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('events', function (Blueprint $table) {
+            $table->id();
+            $table->string('eventname');
+            $table->date('eventdate')->nullable();
+        });
     }
 
     /**
@@ -23,6 +27,6 @@ class AddBirthdateColumn extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('events');
     }
 }

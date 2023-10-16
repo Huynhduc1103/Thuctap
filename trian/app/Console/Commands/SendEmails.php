@@ -2,10 +2,12 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Logs;
 use Illuminate\Console\Command;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
+use Swift_TransportException;
 
 class SendEmails extends Command
 {
@@ -44,10 +46,29 @@ class SendEmails extends Command
         $users = User::whereRaw('DATE_FORMAT(birthday, "%m-%d") = ?', [$today])->get();
         foreach ($users as $user) {
             $name = $user->fullname;
-            Mail::send('email.birthday', compact('name'), function ($email) use ($name, $user) {
-                $email->subject('CHÚC MỪNG SINH NHẬT');
-                $email->to($user->email, $name);
-            });
+            try {
+                Mail::send('email.birthday', compact('name'), function ($email) use ($name, $user) {
+                    $email->subject('CHÚC MỪNG SINH NHẬT');
+                    $email->to($user->email, $name);
+                });
+                Logs::create([
+                    'user_id' => $user->id,
+                    'senddate' => Carbon::now()->format('Y-m-d'),
+                    'status' => 'Success',
+                    'message_id' => 2,
+                    'event_id' => null
+                ]);
+            } catch (Swift_TransportException $e) {
+                Logs::create([
+                    'user_id' => $user->id,
+                    'senddate' => Carbon::now()->format('Y-m-d'),
+                    'status' => 'Error',
+                    'message_id' => 2,
+                    'event_id' => null
+                ]);
+                // Xử lý ngoại lệ khi không thể gửi email
+                echo response()->json(['message' => 'Không thể gửi email']);
+            }
         }
     }
 }

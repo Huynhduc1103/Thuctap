@@ -6,7 +6,7 @@
 <body>
     <h3>Dear, {{$name}}</h3>
     <div style="text-align: center; background-color: #e0ffd1; padding: 20px;">
-        <h1>Sự Kiện Tri Ân Khách Hàng</h1>
+        <h1>{{$eventname}}</h1>
         <p>Xin chào quý khách hàng thân yêu!</p>
         <p>Chúng tôi muốn tri ân sự ủng hộ của bạn và tổ chức một sự kiện đặc biệt.</p>
         <img src="link_den_anh_su_kien.jpg" alt="Sự kiện" width="300">

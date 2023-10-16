@@ -20,13 +20,19 @@ class CreateTableLogs extends Migration
             ->references('id')
             ->on('users')
             ->onDelete('cascade'); // onDelete('cascade') sẽ xóa tất cả bản ghi con khi bản ghi cha bị xóa
-            $table->unsignedBigInteger('template_id'); // Định nghĩa kiểu dữ liệu và tên cột
-            $table->foreign('template_id')
-            ->references('id')
-            ->on('templates')
-            ->onDelete('cascade'); // onDelete('cascade') sẽ xóa tất cả bản ghi con khi bản ghi cha bị xóa
             $table->date('senddate');
             $table->string('status');
+            $table->unsignedBigInteger('message_id'); // Định nghĩa kiểu dữ liệu và tên cột
+            $table->foreign('message_id')
+            ->references('id')
+            ->on('messages')
+            ->onDelete('cascade'); // onDelete('cascade') sẽ xóa tất cả bản ghi con khi bản ghi cha bị xóa
+            $table->unsignedBigInteger('event_id')->nullable(); // Định nghĩa kiểu dữ liệu và tên cột
+            $table->foreign('event_id')
+            ->references('id')
+            ->on('events')
+            ->onDelete('cascade'); // onDelete('cascade') sẽ xóa tất cả bản ghi con khi bản ghi cha bị xóa
+            $table->unique(['user_id', 'message_id']);
         });
     }
 
@@ -37,6 +43,6 @@ class CreateTableLogs extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('table_logs');
+        Schema::dropIfExists('logs');
     }
 }

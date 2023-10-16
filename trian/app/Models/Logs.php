@@ -9,7 +9,7 @@ class Logs extends Model
     public $timestamps = false;
     protected $table = 'logs'; // Tên của bảng
 
-    protected $fillable = ['user_id', 'template_id', 'senddate', 'status'];
+    protected $fillable = ['user_id', 'senddate', 'status', 'message_id', 'event_id'];
 
     public function user()
     {
@@ -17,6 +17,10 @@ class Logs extends Model
     }
     public function message()
     {
-        return $this->belongsTo(Template::class, 'template_id', 'id'); // Quan hệ many-to-one: Một log thuộc về một người dùng
+        return $this->belongsTo(Message::class, 'message_id', 'id'); // Quan hệ many-to-one: Một log thuộc về một người dùng
+    }
+    public function event()
+    {
+        return $this->belongsTo(Event::class, 'event_id', 'id'); // Quan hệ many-to-one: Một log thuộc về một người dùng
     }
 }

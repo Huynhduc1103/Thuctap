@@ -15,7 +15,6 @@ class CreateTableTemplates extends Migration
     {
         Schema::create('templates', function (Blueprint $table) {
             $table->id();
-            $table->string('notification');
             $table->datetime('timer');
             $table->string('type');
             $table->string('data');
@@ -23,6 +22,11 @@ class CreateTableTemplates extends Migration
             $table->foreign('message_id')
             ->references('id')
             ->on('messages')
+            ->onDelete('cascade'); // onDelete('cascade') sẽ xóa tất cả bản ghi con khi bản ghi cha bị xóa
+            $table->unsignedBigInteger('event_id'); // Định nghĩa kiểu dữ liệu và tên cột
+            $table->foreign('event_id')
+            ->references('id')
+            ->on('events')
             ->onDelete('cascade'); // onDelete('cascade') sẽ xóa tất cả bản ghi con khi bản ghi cha bị xóa
         });
     }
@@ -34,6 +38,6 @@ class CreateTableTemplates extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('table_templates');
+        Schema::dropIfExists('templates');
     }
 }
