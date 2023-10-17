@@ -25,6 +25,12 @@ $router->post('create', 'indexcontroller@create');
 $router->put('update/{id}', 'indexcontroller@update');
 $router->delete('delete/{id}', 'indexcontroller@delete');
 
+$router->get('readEvent', 'EventController@read');
+$router->get('findEvent', 'EventController@findId');
+$router->post('createEvent', 'EventController@create');
+$router->put('updateEvent/{id}', 'EventController@update');
+$router->delete('deleteEvent/{id}', 'EventController@delete');
+
 $router->get('/searchuser', 'SearchController@searchByUser');
 $router->get('/searchtemplate', 'SearchController@searchByTemplade');
 $router->get('/searchmessage', 'SearchController@searchByMessage');
