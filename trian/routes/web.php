@@ -37,3 +37,8 @@ $router->get('/pagintionlogs', 'PaginationController@PagintionLogs');
 
 
 $router->get('/sendsms', 'sendSMS@sendSms');
+
+$router->get('/readUser', 'UserController@readUser');
+$router->post('/createUser', 'UserController@createUser');
+$router->delete('/deleteUser/{id}', 'UserController@deleteUser');
+$router->put('updateUser/{id}', 'UserController@updateUser');

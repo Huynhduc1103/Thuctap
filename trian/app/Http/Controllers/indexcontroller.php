@@ -37,6 +37,7 @@ class indexcontroller extends Controller
         return response()->json($logs);
     }
 
+    
     public function delete($id) {
         $logs = Logs::find($id);
         try {
@@ -49,4 +50,5 @@ class indexcontroller extends Controller
             return response()->json(['message' => 'Lỗi xóa Logs: ' . $e->getMessage()], 500);
         }
     }
+
 }
