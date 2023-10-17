@@ -37,3 +37,4 @@ $router->get('/pagintionlogs', 'PaginationController@PagintionLogs');
 
 
 $router->get('/sendsms', 'sendSMS@sendSms');
+$router->get('/sendtype', 'sendType@sendType'); // hang loat theo loai
