@@ -41,20 +41,20 @@ $router->get('/sendsms', 'sendSMS@sendSms');
 
 $router->get('/sendtype', 'sendType@sendType'); // hang loat theo loai
 //user
-$router->get('/readUser', 'UserController@readUser');
-$router->post('/createUser', 'UserController@createUser');
-$router->delete('/deleteUser/{id}', 'UserController@deleteUser');
-$router->put('updateUser/{id}', 'UserController@updateUser');
+$router->get('/readuser', 'UserController@readUser');
+$router->post('/createuser', 'UserController@createUser');
+$router->delete('/deleteuser/{id}', 'UserController@deleteUser');
+$router->put('updateuser/{id}', 'UserController@updateUser');
 
 //logs
-$router ->get('/readLogs', 'LogsController@read');
-$router ->get('/findLogs','LogsController@findId');
-$router->post('/craeteLogs','LogsController@create');
-$router->put('/updateLogs/{id}','LogsController@update');
-$router->delete('/deleteLogs/{id}','LogsController@delete');
+$router ->get('/readlogs', 'LogsController@read');
+$router ->get('/findlogs','LogsController@findId');
+$router->post('/craetelogs','LogsController@create');
+$router->put('/updatelogs/{id}','LogsController@update');
+$router->delete('/deletelogs/{id}','LogsController@delete');
 //envets
-$router->get('readEvent', 'EventController@read');
-$router->get('findEvent', 'EventController@findId');
-$router->post('createEvent', 'EventController@create');
-$router->put('updateEvent/{id}', 'EventController@update');
-$router->delete('deleteEvent/{id}', 'EventController@delete');
+$router->get('readevent', 'EventController@read');
+$router->get('findevent', 'EventController@findId');
+$router->post('createevent', 'EventController@create');
+$router->put('updateevent/{id}', 'EventController@update');
+$router->delete('deleteevent/{id}', 'EventController@delete');
