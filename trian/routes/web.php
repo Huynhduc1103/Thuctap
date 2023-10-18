@@ -25,11 +25,6 @@ $router->post('create', 'indexcontroller@create');
 $router->put('update/{id}', 'indexcontroller@update');
 $router->delete('delete/{id}', 'indexcontroller@delete');
 
-$router->get('readEvent', 'EventController@read');
-$router->get('findEvent', 'EventController@findId');
-$router->post('createEvent', 'EventController@create');
-$router->put('updateEvent/{id}', 'EventController@update');
-$router->delete('deleteEvent/{id}', 'EventController@delete');
 
 $router->get('/searchuser', 'SearchController@searchByUser');
 $router->get('/searchtemplate', 'SearchController@searchByTemplade');
@@ -45,7 +40,7 @@ $router->get('/pagintionlogs', 'PaginationController@PagintionLogs');
 $router->get('/sendsms', 'sendSMS@sendSms');
 
 $router->get('/sendtype', 'sendType@sendType'); // hang loat theo loai
-
+//user
 $router->get('/readUser', 'UserController@readUser');
 $router->post('/createUser', 'UserController@createUser');
 $router->delete('/deleteUser/{id}', 'UserController@deleteUser');
@@ -57,3 +52,9 @@ $router ->get('/findLogs','LogsController@findId');
 $router->post('/craeteLogs','LogsController@create');
 $router->put('/updateLogs/{id}','LogsController@update');
 $router->delete('/deleteLogs/{id}','LogsController@delete');
+//envets
+$router->get('readEvent', 'EventController@read');
+$router->get('findEvent', 'EventController@findId');
+$router->post('createEvent', 'EventController@create');
+$router->put('updateEvent/{id}', 'EventController@update');
+$router->delete('deleteEvent/{id}', 'EventController@delete');
