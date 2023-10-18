@@ -50,3 +50,10 @@ $router->get('/readUser', 'UserController@readUser');
 $router->post('/createUser', 'UserController@createUser');
 $router->delete('/deleteUser/{id}', 'UserController@deleteUser');
 $router->put('updateUser/{id}', 'UserController@updateUser');
+
+//logs
+$router ->get('/readLogs', 'LogsController@read');
+$router ->get('/findLogs','LogsController@findId');
+$router->post('/craeteLogs','LogsController@create');
+$router->put('/updateLogs/{id}','LogsController@update');
+$router->delete('/deleteLogs/{id}','LogsController@delete');
