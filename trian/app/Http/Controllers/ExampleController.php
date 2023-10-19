@@ -34,42 +34,27 @@ class ExampleController extends Controller
     public function sendall()
     {
         $users = User::all();
-        $mail = '';
         foreach ($users as $user) {
-            $mail = $mail . $user->email . ',';
-        }
-        $template = Template::create([
-            'notification' => 'Email',
-            'timer' => Carbon::now()->format('Y-m-d H:i:s'),
-            'type' => 'GROUP',
-            'data' => $mail,
-            'message_id' => 1
-        ]);
-        //cat chuoi 
-        $mang = explode(",", $template->data);
-        for ($i = 0; $i < count($mang) - 1; $i++) {
-            $user = User::where('email', 'like', '%' . $mang[$i] . '%')->first();
             $name = $user->fullname;
             try {
                 Mail::send('email.birthday', compact('name'), function ($email) use ($name, $user) {
                     $email->subject('Thư chúc mừng');
                     $email->to($user->email, $name);
                 });
-                //echo $template->id;
-                $logs = Logs::create([
+                Logs::create([
                     'user_id' => $user->id,
-                    'template_id' => $template->id,
-                    'senddate' => '2023-10-04',
-                    // Carbon::now()->format('Y-m-d')
-                    'status' => 'success'
+                    'senddate' => Carbon::now()->format('Y-m-d'),
+                    'status' => 'Success',
+                    'message_id' => 2,
+                    'event_id' => null
                 ]);
             } catch (Swift_TransportException $e) {
                 Logs::create([
                     'user_id' => $user->id,
-                    'template_id' => $template->id,
-                    'senddate' => '2023-10-04',
-                    // Carbon::now()->format('Y-m-d')
-                    'status' => 'Error'
+                    'senddate' => Carbon::now()->format('Y-m-d'),
+                    'status' => 'Error',
+                    'message_id' => 2,
+                    'event_id' => null
                 ]);
                 // Xử lý ngoại lệ khi không thể gửi email
                 echo response()->json(['message' => 'Không thể gửi email']);
