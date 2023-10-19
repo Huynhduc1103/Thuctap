@@ -58,3 +58,6 @@ $router->get('findevent', 'EventController@findId');
 $router->post('createevent', 'EventController@create');
 $router->put('updateevent/{id}', 'EventController@update');
 $router->delete('deleteevent/{id}', 'EventController@delete');
+
+
+$router->get('retrybirthday', 'retrycontroller@retrybirthday');
