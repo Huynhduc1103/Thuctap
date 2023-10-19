@@ -59,5 +59,10 @@ $router->post('createevent', 'EventController@create');
 $router->put('updateevent/{id}', 'EventController@update');
 $router->delete('deleteevent/{id}', 'EventController@delete');
 
+//message
+$router->get('/readMessage', 'MessageController@readMessage');
+$router->post('/createMessage', 'MessageController@createMessage');
+$router->delete('/deleteMessage/{id}', 'MessageController@deleteMessage');
+$router->put('updateMessage/{id}', 'MessageController@updateMessage');
 
 $router->get('retrybirthday', 'retrycontroller@retrybirthday');
