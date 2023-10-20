@@ -52,12 +52,20 @@ $router ->get('/findlogs','LogsController@findId');
 $router->post('/craetelogs','LogsController@create');
 $router->put('/updatelogs/{id}','LogsController@update');
 $router->delete('/deletelogs/{id}','LogsController@delete');
+
 //envets
 $router->get('readevent', 'EventController@read');
 $router->get('findevent', 'EventController@findId');
 $router->post('createevent', 'EventController@create');
 $router->put('updateevent/{id}', 'EventController@update');
 $router->delete('deleteevent/{id}', 'EventController@delete');
+
+//template
+$router->get('readtemp', 'TemplateController@read');
+$router->get('findtemp', 'TemplateController@findId');
+$router->post('createtemp', 'TemplateController@create');
+$router->put('updatetemp/{id}', 'TemplateController@update');
+$router->delete('deletetemp/{id}', 'TemplateController@delete');
 
 //message
 $router->get('/readMessage', 'MessageController@readMessage');
