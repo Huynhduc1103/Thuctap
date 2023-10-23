@@ -15,7 +15,7 @@ class TemplateController extends Controller
 
     public function create(Request $request) {
         $timer = $request->input('timer');
-        $type = $request->input('type');
+        $type = '';
         $data = $request->input('data');
         $message_id = $request->input('message_id');
         $event_id = $request->input('event_id');

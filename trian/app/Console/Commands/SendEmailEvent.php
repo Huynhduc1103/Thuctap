@@ -51,7 +51,6 @@ class SendEmailEvent extends Command
         $dotenv->load();
         $APIKey = env('API_KEY');
         $SecretKey = env('SECRET_KEY');
-        $Content = "Chuc mung sinh nhat {P2,50}. Kinh chuc QK co nhieu suc khoe, thanh cong va hanh phuc! Nhan dip sinh nhat xin gui den {P2,50} coupon {P2,20}. Tran trong.";
         $BrandName = "Baotrixemay";
         $today = Carbon::now()->format('Y-m-d H-i');
         $timers = Template::whereRaw('DATE_FORMAT(timer, "%Y-%m-%d %H-%i") = ?', [$today])->get();
@@ -88,6 +87,7 @@ class SendEmailEvent extends Command
                     echo response()->json(['message' => 'Không thể gửi email']);
                 }
                 // send sms
+                $Content = "Chuc mung sinh nhat" . $name . ". Kinh chuc QK co nhieu suc khoe, thanh cong va hanh phuc! Nhan dip sinh nhat xin gui den " . $name . " coupon 20000. Tran trong.";
                 // $YourPhone = $user->phone;
                 // $SendContent = urlencode($Content);
                 // $data = "http://rest.esms.vn/MainService.svc/json/SendMultipleMessage_V4_get?Phone=$YourPhone&ApiKey=$APIKey&SecretKey=$SecretKey&Content=$SendContent&Brandname=$BrandName&SmsType=2";
