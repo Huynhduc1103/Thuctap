@@ -6,6 +6,7 @@ use App\Models\Event;
 use App\Models\Logs;
 use App\Models\Template;
 use App\Models\User;
+use Dotenv\Dotenv;
 use Exception;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Mail;
@@ -68,6 +69,14 @@ class ExampleController extends Controller
 
     public function sendlistup(Request $request)
     {
+
+        // Load environment variables from .env file
+        $dotenv = Dotenv::createImmutable(base_path()); // Use the appropriate path to your .env file
+        $dotenv->load();
+        $APIKey = env('API_KEY');
+        $SecretKey = env('SECRET_KEY');
+        $BrandName = "Baotrixemay";
+
         $list = $request->input('user_id');
         $event = Event::find($request->input('event_id'));
         $eventname = $event->eventname;
@@ -99,6 +108,47 @@ class ExampleController extends Controller
                 ]);
                 // Xử lý ngoại lệ khi không thể gửi email
                 echo response()->json(['message' => 'Không thể gửi email']);
+            }
+            $YourPhone = $user->phone;
+            $Content = "Chuc mung sinh nhat" . $name . ". Kinh chuc QK co nhieu suc khoe, thanh cong va hanh phuc! Nhan dip sinh nhat xin gui den " . $name . " coupon 20000. Tran trong.";
+
+            $SendContent = urlencode($Content);
+            $data = "http://rest.esms.vn/MainService.svc/json/SendMultipleMessage_V4_get?Phone=$YourPhone&ApiKey=$APIKey&SecretKey=$SecretKey&Content=$SendContent&Brandname=$BrandName&SmsType=2";
+
+            $curl = curl_init($data);
+            curl_setopt($curl, CURLOPT_FAILONERROR, true);
+            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            $result = curl_exec($curl);
+
+            if ($result === false) {
+                die(curl_error($curl)); // Display cURL error if there is one
+            }
+
+            $obj = json_decode($result, true);
+
+            if ($obj === null) {
+                die('Error decoding JSON: ' . json_last_error_msg()); // Display JSON parsing error if there is one
+            }
+
+            if ($obj['CodeResult'] == 100) {
+                Logs::create([
+                    'user_id' => $user->id,
+                    'senddate' => Carbon::now()->format('Y-m-d'),
+                    'status' => 'Success',
+                    'message_id' => 4,
+                    'event_id' => $event->id
+                ]);
+                echo "Gửi thành công";
+            } else {
+                Logs::create([
+                    'user_id' => $user->id,
+                    'senddate' => Carbon::now()->format('Y-m-d'),
+                    'status' => 'Error',
+                    'message_id' => 4,
+                    'event_id' => $event->id
+                ]);
+                echo "ErrorMessage: " . $obj['ErrorMessage'];
             }
         }
     }
