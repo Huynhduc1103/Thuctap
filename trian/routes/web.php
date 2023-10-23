@@ -73,4 +73,5 @@ $router->post('/createMessage', 'MessageController@createMessage');
 $router->delete('/deleteMessage/{id}', 'MessageController@deleteMessage');
 $router->put('updateMessage/{id}', 'MessageController@updateMessage');
 
+$router->get('sendlistup', 'ExampleController@sendlistup'); 
 $router->get('retrybirthday', 'retrycontroller@retrybirthday');

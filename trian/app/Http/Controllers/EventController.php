@@ -8,18 +8,21 @@ use Illuminate\Support\Carbon;
 
 class EventController extends Controller
 {
-    public function read() {
+    public function read()
+    {
         $event = Event::all();
         return response()->json($event);
     }
 
-    public function findId(Request $request) {
+    public function findId(Request $request)
+    {
         $id = $request->input('id');
         $event = Event::find($id);
         return response()->json($event);
     }
 
-    public function update($id, Request $request) {
+    public function update($id, Request $request)
+    {
         $event = Event::find($id);
         $event->update([
             'eventname' => $request->input('eventname'),
@@ -28,16 +31,17 @@ class EventController extends Controller
         return response()->json($event);
     }
 
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         $event = Event::create([
             'eventname' => $request->input('eventname'),
             'eventdate' => $request->input('eventdate')
-           
         ]);
         return response()->json($event);
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $event = Event::find($id);
         try {
             // Xóa 
