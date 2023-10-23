@@ -54,6 +54,7 @@ class sendType extends Controller
                     // Xử lý ngoại lệ khi không thể gửi email
                     echo response()->json(['message' => 'Không thể gửi email']);
                 }
+                
                 // send sms
                 $YourPhone = $user->phone;
                 $SendContent = urlencode($Content);

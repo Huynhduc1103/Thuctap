@@ -45,6 +45,7 @@ $router->get('/readuser', 'UserController@readUser');
 $router->post('/createuser', 'UserController@createUser');
 $router->delete('/deleteuser/{id}', 'UserController@deleteUser');
 $router->put('updateuser/{id}', 'UserController@updateUser');
+$router->get('/searchuser', 'UserController@searchUsers');
 
 //logs
 $router ->get('/readlogs', 'LogsController@read');
