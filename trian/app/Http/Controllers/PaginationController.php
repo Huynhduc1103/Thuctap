@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Template;
@@ -30,5 +31,9 @@ class PaginationController extends Controller
     {
         $logs = Logs::paginate(5);
         return response()->json(['logs' => $logs], 200);
+    }
+    public function PagintionEvent(){
+        $event = Event::paginate(5);
+        return response()->json(['logs' => $event], 200);
     }
 }
