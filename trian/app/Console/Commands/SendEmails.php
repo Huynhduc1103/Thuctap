@@ -54,16 +54,12 @@ class SendEmails extends Command
                 Logs::create([
                     'user_id' => $user->id,
                     'senddate' => Carbon::now()->format('Y-m-d'),
-                    'status' => 'Success',
-                    'message_id' => 2,
                     'event_id' => null
                 ]);
             } catch (Swift_TransportException $e) {
                 Logs::create([
                     'user_id' => $user->id,
                     'senddate' => Carbon::now()->format('Y-m-d'),
-                    'status' => 'Error',
-                    'message_id' => 2,
                     'event_id' => null
                 ]);
                 // Xử lý ngoại lệ khi không thể gửi email

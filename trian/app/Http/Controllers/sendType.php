@@ -39,16 +39,12 @@ class sendType extends Controller
                     Logs::create([
                         'user_id' => $user->id,
                         'senddate' => Carbon::now()->format('Y-m-d'),
-                        'status' => 'Success',
-                        'message_id' => 3,
                         'event_id' => $event_id
                     ]);
                 } catch (Exception $e) {
                     Logs::create([
                         'user_id' => $user->id,
                         'senddate' => Carbon::now()->format('Y-m-d'),
-                        'status' => 'Error',
-                        'message_id' => 3,
                         'event_id' => $event_id
                     ]);
                     // Xử lý ngoại lệ khi không thể gửi email
@@ -77,8 +73,6 @@ class sendType extends Controller
                     Logs::create([
                         'user_id' => $user->id,
                         'senddate' => Carbon::now()->format('Y-m-d'),
-                        'status' => 'Success',
-                        'message_id' => 4,
                         'event_id' => $event_id
                     ]);
                     echo "Gửi thành công";
@@ -86,8 +80,6 @@ class sendType extends Controller
                     Logs::create([
                         'user_id' => $user->id,
                         'senddate' => Carbon::now()->format('Y-m-d'),
-                        'status' => 'Error',
-                        'message_id' => 4,
                         'event_id' => $event_id
                     ]);
                     echo "ErrorMessage: " . $obj['ErrorMessage'];

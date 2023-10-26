@@ -17,7 +17,6 @@ class TemplateController extends Controller
         $timer = $request->input('timer');
         $type = '';
         $data = $request->input('data');
-        $message_id = $request->input('message_id');
         $event_id = $request->input('event_id');
     
         if ($type === 'GROUP') {
@@ -41,7 +40,6 @@ class TemplateController extends Controller
             'timer' => $timer,
             'type' => $type,
             'data' => $data,
-            'message_id' => $message_id,
             'event_id' => $event_id,
         ]);
     
@@ -62,7 +60,6 @@ class TemplateController extends Controller
         $timer = $request->input('timer');
         $type = $request->input('type');
         $data = $request->input('data');
-        $message_id = $request->input('message_id');
         $event_id = $request->input('event_id');
     
         if ($type === 'GROUP') {
@@ -86,7 +83,6 @@ class TemplateController extends Controller
             'timer' => $timer,
             'type' => $type,
             'data' => $data,
-            'message_id' => $message_id,
             'event_id' => $event_id,
         ]);
     

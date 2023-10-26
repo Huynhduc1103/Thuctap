@@ -45,30 +45,13 @@ class SearchController extends Controller
         return response()->json(['template' => $template], 200);
     }
     
-    public function searchByMessage(Request $request)
-    {
-        $keyword = $request->input('keyword');
-
-        $message = Message::where('id', 'like', '%' . $keyword . '%')
-            ->orWhere('eventname', 'like', '%' . $keyword . '%')
-            ->orWhere('desribe', 'like', '%' . $keyword . '%')
-            ->orWhere('eventdate', 'like', '%' . $keyword . '%')
-            ->orWhere('template_id', 'like', '%' . $keyword . '%')
-            ->get();
-
-        if ($message->isEmpty()) {
-            return response()->json(['error' => 'No users found.'], 404);
-        }
-
-        return response()->json(['template' => $message], 200);
-    }
+    
     public function searchByLogs(Request $request)
     {
         $keyword = $request->input('keyword');
 
         $logs = Logs::where('id', 'like', '%' . $keyword . '%')
             ->orWhere('user_id', 'like', '%' . $keyword . '%')
-            ->orWhere('message_id', 'like', '%' . $keyword . '%')
             ->orWhere('senddate', 'like', '%' . $keyword . '%')
             ->orWhere('status_id', 'like', '%' . $keyword . '%')
             ->get();

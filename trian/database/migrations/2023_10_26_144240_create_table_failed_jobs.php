@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTableLogs extends Migration
+class CreateTableFailedJobs extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,20 @@ class CreateTableLogs extends Migration
      */
     public function up()
     {
-        Schema::create('logs', function (Blueprint $table) {
+        Schema::create('faileds', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id'); // Định nghĩa kiểu dữ liệu và tên cột
             $table->foreign('user_id')
             ->references('id')
             ->on('users')
             ->onDelete('cascade'); // onDelete('cascade') sẽ xóa tất cả bản ghi con khi bản ghi cha bị xóa
-            $table->date('senddate');
+            $table->date('date');
             $table->unsignedBigInteger('event_id')->nullable(); // Định nghĩa kiểu dữ liệu và tên cột
             $table->foreign('event_id')
             ->references('id')
             ->on('events')
             ->onDelete('cascade'); // onDelete('cascade') sẽ xóa tất cả bản ghi con khi bản ghi cha bị xóa
-            $table->unique(['user_id', 'event_id']);
+            $table->string('type');
         });
     }
 
@@ -37,6 +37,6 @@ class CreateTableLogs extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('logs');
+        Schema::dropIfExists('table_failed_jobs');
     }
 }

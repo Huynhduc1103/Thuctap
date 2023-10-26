@@ -22,7 +22,6 @@ class indexcontroller extends Controller
         $logs = Logs::find($id);
         $logs->update([
             'senddate' => $request->input('senddate'),
-            'status_id' => $request->input('status_id')
         ]);
         return response()->json($logs);
     }
@@ -30,7 +29,6 @@ class indexcontroller extends Controller
     public function create(Request $request) {
         $logs = Logs::create([
             'user_id' => $request->input('user_id'),
-            'message_id' => $request->input('message_id'),
             'senddate' => $request->input('senddate'),
             'status_id' => $request->input('status_id')
         ]);

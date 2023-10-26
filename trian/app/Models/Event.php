@@ -20,4 +20,9 @@ class Event extends Model
     {
         return $this->hasMany(Logs::class, 'event_id', 'id'); // Quan hệ one-to-many: Một message có nhiều logs
     }
+
+    public function failed()
+    {
+        return $this->hasMany(Failed::class, 'event_id', 'id'); // Quan hệ one-to-many: Một message có nhiều logs
+    }
 }

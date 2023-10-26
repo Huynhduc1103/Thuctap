@@ -26,8 +26,6 @@ class LogsController extends Controller
         $log->update([
             'user_id' => $request->input('user_id'),
             'senddate' => $request->input('senddate'),
-            'status' => $request->input('status'),
-            'message_id' => $request->input('message_id'),
             'event_id' => $request->input('event_id'),
         ]);
         return response()->json($log);
@@ -38,8 +36,6 @@ class LogsController extends Controller
         $log = Logs::create([
             'user_id' => $request->input('user_id'),
             'senddate' => $request->input('senddate'),
-            'status' => $request->input('status'),
-            'message_id' => $request->input('message_id'),
             'event_id' => $request->input('event_id'),
         ]);
         return response()->json($log);

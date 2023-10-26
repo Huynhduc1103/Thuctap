@@ -14,9 +14,10 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         'App\Console\Commands\SendEmails',
-        'App\Console\Commands\SendEmailEvent',
         'App\Console\Commands\SmsBirthday',
-        'App\Console\Commands\SmsEvent'
+        'App\Console\Commands\SmsEvent',
+        'App\Console\Commands\SendEvent',
+        'App\Console\Commands\SendBirthday',
     ];
 
     /**

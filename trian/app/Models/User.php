@@ -25,6 +25,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     
         public function logs()
         {
-            return $this->hasMany(Log::class, 'user_id', 'id'); // Quan hệ one-to-many: Một người dùng có nhiều logs
+            return $this->hasMany(Logs::class, 'user_id', 'id'); // Quan hệ one-to-many: Một người dùng có nhiều logs
+        }
+        public function failed()
+        {
+            return $this->hasMany(Failed::class, 'user_id', 'id'); // Quan hệ one-to-many: Một người dùng có nhiều logs
         }
 }

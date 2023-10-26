@@ -4,18 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Logs extends Model
+class Failed extends Model
 {
     public $timestamps = false;
-    protected $table = 'logs'; // Tên của bảng
+    protected $table = 'faileds'; // Tên của bảng
 
-    protected $fillable = ['user_id', 'senddate', 'event_id'];
+    protected $fillable = ['user_id', 'date', 'event_id', 'type'];
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id'); // Quan hệ many-to-one: Một log thuộc về một người dùng
+        return $this->belongsTo(User::class, 'user_id', 'id'); // Quan hệ many-to-one: Một error thuộc về một người dùng
     }
-
     public function event()
     {
         return $this->belongsTo(Event::class, 'event_id', 'id'); // Quan hệ many-to-one: Một log thuộc về một người dùng

@@ -18,11 +18,6 @@ class CreateTableTemplates extends Migration
             $table->datetime('timer');
             $table->string('type');
             $table->string('data');
-            $table->unsignedBigInteger('message_id'); // Định nghĩa kiểu dữ liệu và tên cột
-            $table->foreign('message_id')
-            ->references('id')
-            ->on('messages')
-            ->onDelete('cascade'); // onDelete('cascade') sẽ xóa tất cả bản ghi con khi bản ghi cha bị xóa
             $table->unsignedBigInteger('event_id'); // Định nghĩa kiểu dữ liệu và tên cột
             $table->foreign('event_id')
             ->references('id')
