@@ -16,7 +16,7 @@ class TemplateController extends Controller
 
     public function create(Request $request) {
         
-        $timer = date('Y-m-d H:i:s'); // Lấy ngày giờ hiện tại
+        $timer = $request->input('timer'); // Không được lấy ngày giờ hiện tại nghen
         $data = $request->input('data');
         $message_id = $request->input('message_id');
         $event_id = $request->input('event_id');
@@ -51,7 +51,7 @@ class TemplateController extends Controller
             return response()->json(['error' => 'Sự kiện không tồn tại.'], 404);
         }
     
-        $timer = date('Y-m-d H:i:s'); // Lấy ngày giờ hiện tại
+        $timer = $request->input('timer'); // Không được lấy ngày giờ hiện tại nghen
         $data = $request->input('data');
         $message_id = $request->input('message_id');
         $event_id = $request->input('event_id');
