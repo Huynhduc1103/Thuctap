@@ -75,5 +75,12 @@ $router->post('/createMessage', 'MessageController@createMessage');
 $router->delete('/deleteMessage/{id}', 'MessageController@deleteMessage');
 $router->put('updateMessage/{id}', 'MessageController@updateMessage');
 
+
+//failed
+$router->get('/readFailed', 'FailedController@readFailed');
+$router->post('/createFailed', 'FailedController@createFailed');
+$router->delete('/deleteFailed/{id}', 'FailedController@deleteFailed');
+$router->put('updateFailed/{id}', 'FailedController@updateFailed');
+
 $router->get('sendlistup', 'ExampleController@sendlistup'); 
 $router->get('retrybirthday', 'retrycontroller@retrybirthday');
