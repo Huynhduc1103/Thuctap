@@ -9,7 +9,7 @@ class Logs extends Model
     public $timestamps = false;
     protected $table = 'logs'; // Tên của bảng
 
-    protected $fillable = ['user_id', 'senddate', 'event_id'];
+    protected $fillable = ['user_id', 'senddate', 'event_id', 'sent'];
 
     public function user()
     {

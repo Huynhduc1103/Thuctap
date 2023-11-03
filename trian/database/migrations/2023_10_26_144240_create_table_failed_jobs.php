@@ -27,6 +27,7 @@ class CreateTableFailedJobs extends Migration
             ->on('events')
             ->onDelete('cascade'); // onDelete('cascade') sẽ xóa tất cả bản ghi con khi bản ghi cha bị xóa
             $table->string('type');
+            $table->string('error');
         });
     }
 

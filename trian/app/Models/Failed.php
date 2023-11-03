@@ -9,7 +9,7 @@ class Failed extends Model
     public $timestamps = false;
     protected $table = 'faileds'; // Tên của bảng
 
-    protected $fillable = ['user_id', 'date', 'event_id', 'type'];
+    protected $fillable = ['user_id', 'date', 'event_id', 'type', 'error'];
 
     public function user()
     {

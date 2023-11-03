@@ -13,9 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        'App\Console\Commands\SendEmails',
-        'App\Console\Commands\SmsBirthday',
-        'App\Console\Commands\SmsEvent',
+        'App\console\Commands\ScheduleFailed',
         'App\Console\Commands\SendEvent',
         'App\Console\Commands\SendBirthday',
     ];
@@ -28,9 +26,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        //$schedule->command('User:email')->everyMinute()->withoutOverlapping();
-        //$schedule->command('User:sms')->everyMinute()->withoutOverlapping();
+        
+        $schedule->command('message:birthday')->everyMinute()->withoutOverlapping();
+        //->dailyAt('07:00')->withoutOverlapping();
         $schedule->command('message:event')->everyMinute()->withoutOverlapping();
-        //$schedule->command('message:sendevent')->everyMinute()->withoutOverlapping();
+        $schedule->command('failed:send')->everyMinute()->withoutOverlapping();
     }
 }

@@ -5,22 +5,22 @@ namespace App\Console\Commands;
 use App\Models\Event;
 use App\Models\Failed;
 use App\Models\Logs;
-use App\Models\Template;
 use App\Models\User;
+use App\Providers\send;
 use Carbon\Carbon;
 use Dotenv\Dotenv;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 
-class SendEvent extends Command
+class ScheduleFailed extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'message:event';
+    protected $signature = 'failed:send';
 
     /**
      * The console command description.
@@ -39,11 +39,54 @@ class SendEvent extends Command
         parent::__construct();
     }
 
+
+
     /**
      * Execute the console command.
      *
      * @return mixed
+
      */
+    public function email($user, $event)
+    {
+        $name = $user->fullname;
+        $eventname = $event->eventname;
+        $date = Carbon::parse($event->eventdate);
+        $eventdate = $date->format('d-m-Y');
+        try {
+            Mail::send('email.event', compact('name', 'eventdate', 'eventname'), function ($email) use ($name, $user, $eventdate, $eventname) {
+                $email->subject('SỰ KIỆN TRI ÂN KHÁCH HÀNG');
+                $email->to($user->email, $name, $eventdate);
+            });
+            $logs = Logs::where('user_id', $user->id)
+            ->where('event_id', $event->id)
+            ->first();
+            if (empty($logs)) {
+                Logs::create([
+                    'user_id' => $user->id,
+                    'senddate' => Carbon::now()->format('Y-m-d'),
+                    'event_id' => $event->id,
+                    'sent' => 'EMAIL'
+                ]);
+            } else {
+                $logs->update([
+                    'sent' => 'EMAIL - '.$logs->sent
+                ]);
+            }
+            
+        } catch (Exception $e) {
+            Failed::create([
+                'user_id' => $user->id,
+                'date' => Carbon::now()->format('Y-m-d'),
+                'event_id' => $event->id,
+                'type' => 'EMAIL',
+                'error'=> $e->getMessage()
+            ]);
+            // Xử lý ngoại lệ khi không thể gửi email
+            echo response()->json(['message' => 'Không thể gửi email']);
+        }
+    }
+
     public function sms($user, $event)
     {
         $dotenv = Dotenv::createImmutable(base_path()); // Use the appropriate path to your .env file
@@ -99,69 +142,19 @@ class SendEvent extends Command
             echo "ErrorMessage: " . $obj['ErrorMessage'];
         }
     }
-    public function email($user, $event)
-    {
-        $name = $user->fullname;
-        $eventname = $event->eventname;
-        $date = Carbon::parse($event->eventdate);
-        $eventdate = $date->format('d-m-Y');
-        try {
-            Mail::send('email.event', compact('name', 'eventdate', 'eventname'), function ($email) use ($name, $user, $eventdate, $eventname) {
-                $email->subject('SỰ KIỆN TRI ÂN KHÁCH HÀNG');
-                $email->to($user->email, $name, $eventdate);
-            });
-            $logs = Logs::where('user_id', $user->id)
-            ->where('event_id', $event->id)
-            ->first();
-            if (empty($logs)) {
-                Logs::create([
-                    'user_id' => $user->id,
-                    'senddate' => Carbon::now()->format('Y-m-d'),
-                    'event_id' => $event->id,
-                    'sent' => 'EMAIL'
-                ]);
-            } else {
-                $logs->update([
-                    'sent' => 'EMAIL - '.$logs->sent
-                ]);
-            }
-            
-        } catch (Exception $e) {
-            Failed::create([
-                'user_id' => $user->id,
-                'date' => Carbon::now()->format('Y-m-d'),
-                'event_id' => $event->id,
-                'type' => 'EMAIL',
-                'error'=> $e->getMessage()
-            ]);
-            // Xử lý ngoại lệ khi không thể gửi email
-            echo response()->json(['message' => 'Không thể gửi email']);
-        }
-    }
-
     public function handle()
     {
-        $today = Carbon::now()->format('Y-m-d H-i');
-        $timers = Template::whereRaw('DATE_FORMAT(timer, "%Y-%m-%d %H-%i") = ?', [$today])->get();
-        foreach ($timers as $timer) {
-            $listuser = explode(",", $timer->data);
-            $event = Event::find($timer->event_id);
-            for ($i = 0; $i < count($listuser); $i++) {
-                $user = User::find($listuser[$i]);
-                $logmail = Logs::Where('user_id', $user->id)
-                    ->where('event_id', $timer->event_id)->first();
-                $logsms = Logs::Where('user_id', $user->id)
-                    ->where('event_id', $timer->event_id)->first();
-                if (empty($logmail)) {
-                    SendEvent::email($user, $event);
-                } else {
-                    echo 'đã gửi cho email '. $user->fullname;
-                }
-                if (empty($logsms)) {
-                    SendEvent::sms($user, $event);
-                } else {
-                    echo 'đã gửi cho sms '. $user->fullname;
-                }
+        $faileds = Failed::all();
+        foreach ($faileds as $failed) {
+            $user = User::find($failed->user_id);
+            $event = Event::find($failed->event_id);
+
+            if ($failed->type === 'EMAIL') {
+                ScheduleFailed::email($user, $event);
+                $failed->delete();
+            } else {
+                ScheduleFailed::sms($user, $event);
+                $failed->delete();
             }
         }
     }

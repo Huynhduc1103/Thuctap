@@ -20,7 +20,8 @@ class FailedController extends Controller
             'user_id' => $request->input('user_id'),
             'date' => $request->input('date'),
             'event_id' => $request->input('event_id'),
-            'type' => $request->input('type')
+            'type' => $request->input('type'),
+            'error' => $request->input('error')
         ]);
         return response()->json($failed);
     }
@@ -31,7 +32,8 @@ class FailedController extends Controller
             'user_id' => $request->input('user_id'),
             'date' => $request->input('date'),
             'event_id' => $request->input('event_id'),
-            'type' => $request->input('type')
+            'type' => $request->input('type'),
+            'error' => $request->input('error')
         ]);
         return response()->json($failed);
     }

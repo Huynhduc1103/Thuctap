@@ -26,6 +26,7 @@ class CreateTableLogs extends Migration
             ->references('id')
             ->on('events')
             ->onDelete('cascade'); // onDelete('cascade') sẽ xóa tất cả bản ghi con khi bản ghi cha bị xóa
+            $table->string('sent');
             $table->unique(['user_id', 'event_id']);
         });
     }

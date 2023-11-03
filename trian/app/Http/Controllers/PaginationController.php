@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\Failed;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Template;
@@ -29,6 +30,11 @@ class PaginationController extends Controller
     }
     public function PagintionEvent(){
         $event = Event::paginate(5);
-        return response()->json(['logs' => $event], 200);
+        return response()->json(['Events' => $event], 200);
+    }
+
+    public function PagintionFailed(){
+        $failed = Failed::paginate(5);
+        return response()->json(['Faileds' => $failed], 200);
     }
 }
