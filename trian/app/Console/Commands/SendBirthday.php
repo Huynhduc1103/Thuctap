@@ -70,12 +70,21 @@ class SendBirthday extends Command
             die('Error decoding JSON: ' . json_last_error_msg()); // Display JSON parsing error if there is one
         }
         if ($obj['CodeResult'] == 100) {
-            Logs::create([
-                'user_id' => $user->id,
-                'senddate' => Carbon::now()->format('Y-m-d'),
-                'event_id' => null,
-                'type'=> 'SMS'
-            ]);
+            $logs = Logs::where('user_id', $user->id)
+            ->where('event_id', null)
+            ->first();
+            if (empty($logs)) {
+                Logs::create([
+                    'user_id' => $user->id,
+                    'senddate' => Carbon::now()->format('Y-m-d'),
+                    'event_id' => null,
+                    'sent' => 'SMS'
+                ]);
+            } else {
+                $logs->update([
+                    'sent' => $logs->sent . ' - SMS'
+                ]);
+            }
             echo "Gửi thành công";
         } else {
             Failed::create([
@@ -96,12 +105,21 @@ class SendBirthday extends Command
                 $email->subject('CHÚC MỪNG SINH NHẬT');
                 $email->to($user->email, $name);
             });
-            Logs::create([
-                'user_id' => $user->id,
-                'senddate' => Carbon::now()->format('Y-m-d'),
-                'event_id' => null,
-                'type'=>'EMAIL'
-            ]);
+            $logs = Logs::where('user_id', $user->id)
+            ->where('event_id', null)
+            ->first();
+            if (empty($logs)) {
+                Logs::create([
+                    'user_id' => $user->id,
+                    'senddate' => Carbon::now()->format('Y-m-d'),
+                    'event_id' => null,
+                    'sent' => 'EMAIL'
+                ]);
+            } else {
+                $logs->update([
+                    'sent' => 'EMAIL - '.$logs->sent
+                ]);
+            }
         } catch (Exception $e) {
             Failed::create([
                 'user_id' => $user->id,
@@ -119,9 +137,7 @@ class SendBirthday extends Command
         $today = Carbon::now()->format('m-d');
         $users = User::whereRaw('DATE_FORMAT(birthday, "%m-%d") = ?', [$today])->get();
         foreach ($users as $user) {
-            
             SendBirthday::email($user);
-            
             SendBirthday::sms($user);
         }
     }

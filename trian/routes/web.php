@@ -40,7 +40,7 @@ $router->get('/pagintionevent', 'PaginationController@PagintionEvent');
 
 $router->get('/sendsms', 'sendSMS@sendSms');
 
-$router->get('/sendtype', 'sendType@sendType'); // hang loat theo loai
+
 //user
 $router->get('/readuser', 'UserController@readUser');
 $router->post('/createuser', 'UserController@createUser');
@@ -83,4 +83,5 @@ $router->delete('/deleteFailed/{id}', 'FailedController@deleteFailed');
 $router->put('updateFailed/{id}', 'FailedController@updateFailed');
 
 $router->get('sendlistup', 'ExampleController@sendlistup'); 
-$router->get('retrybirthday', 'retrycontroller@retrybirthday');
+$router->get('retry', 'retrycontroller@retry');
+$router->get('sendtype', 'sendType@sendType'); // hang loat theo loai

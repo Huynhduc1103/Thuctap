@@ -122,14 +122,6 @@ class ExampleController extends Controller
             echo response()->json(['message' => 'Không thể gửi email']);
         }
     }
-    public function testmail()
-    {
-        $name = 'Tạ Huỳnh Đức';
-        Mail::send('email.mail', compact('name'), function ($email) use ($name) {
-            $email->subject('Thư chúc mừng');
-            $email->to('huynhduc110503@gmail.com', $name);
-        });
-    }
 
     public function sendall(Request $request)
     {
@@ -143,19 +135,8 @@ class ExampleController extends Controller
 
     public function sendlistup(Request $request)
     {
-
-        // Load environment variables from .env file
-        $dotenv = Dotenv::createImmutable(base_path()); // Use the appropriate path to your .env file
-        $dotenv->load();
-        $APIKey = env('API_KEY');
-        $SecretKey = env('SECRET_KEY');
-        $BrandName = "Baotrixemay";
-
         $list = $request->input('user_id');
         $event = Event::find($request->input('event_id'));
-        $eventname = $event->eventname;
-        $date = Carbon::parse($event->eventdate);
-        $eventdate = $date->format('d-m-Y');
         $listuser = explode(',', $list);
         for ($i = 0; $i < count($listuser); $i++) {
             $user = User::find($listuser[$i]);
