@@ -13,6 +13,50 @@ use App\Models\Logs;
 
 class SearchController extends Controller
 {
+
+    public function searchAll(Request $request)
+{
+    $keyword = $request->input('keyword');
+
+    $results = [];
+
+    // Search in User table
+    $users = $this->searchByUser($request);
+    if ($users->getStatusCode() === 200) {
+        $results['users'] = $users->getData(true)['users'];
+    }
+
+    // Search in Template table
+    $templates = $this->searchByTemplade($request);
+    if ($templates->getStatusCode() === 200) {
+        $results['templates'] = $templates->getData(true)['template'];
+    }
+
+    // Search in Logs table
+    $logs = $this->searchByLogs($request);
+    if ($logs->getStatusCode() === 200) {
+        $results['logs'] = $logs->getData(true)['logs'];
+    }
+
+    // Search in Failed table
+    $failed = $this->searchByFailed($request);
+    if ($failed->getStatusCode() === 200) {
+        $results['failed'] = $failed->getData(true)['failed'];
+    }
+
+    // Search in Event table
+    $events = $this->searchByEvent($request);
+    if ($events->getStatusCode() === 200) {
+        $results['events'] = $events->getData(true)['event'];
+    }
+
+    if (empty($results)) {
+        return response()->json(['error' => 'No results found.'], 404);
+    }
+
+    return response()->json($results, 200);
+}
+
     public function searchByUser(Request $request)
     {
         $keyword = $request->input('keyword');

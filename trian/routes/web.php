@@ -31,6 +31,7 @@ $router->get('/searchtemplate', 'SearchController@searchByTemplade');
 $router->get('/searchevent', 'SearchController@searchByEvent');
 $router->get('/searchlogs', 'SearchController@searchByLogs');
 $router->get('/searchfailed', 'SearchController@searchByFailed');
+$router->get('/search', 'SearchController@searchAll');
 
 $router->get('/pagintionuser', 'PaginationController@PagintionUser');
 $router->get('/pagintiontemplate', 'PaginationController@PagintionTemplate');
