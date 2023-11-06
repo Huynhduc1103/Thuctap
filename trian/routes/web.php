@@ -28,8 +28,9 @@ $router->delete('delete/{id}', 'indexcontroller@delete');
 
 $router->get('/searchuser', 'SearchController@searchByUser');
 $router->get('/searchtemplate', 'SearchController@searchByTemplade');
-$router->get('/searchmessage', 'SearchController@searchByMessage');
+$router->get('/searchevent', 'SearchController@searchByEvent');
 $router->get('/searchlogs', 'SearchController@searchByLogs');
+$router->get('/searchfailed', 'SearchController@searchByFailed');
 
 $router->get('/pagintionuser', 'PaginationController@PagintionUser');
 $router->get('/pagintiontemplate', 'PaginationController@PagintionTemplate');

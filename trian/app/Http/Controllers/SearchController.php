@@ -21,6 +21,8 @@ class SearchController extends Controller
             ->orWhere('phone', 'like', '%' . $keyword . '%')
             ->orWhere('id', 'like', '%' . $keyword . '%')
             ->orWhere('birthday', 'like', '%' . $keyword . '%')
+            ->orWhere('fullname', 'like', '%' . $keyword . '%')
+            ->orWhere('groupcode', 'like', '%' . $keyword . '%')
             ->get();
 
         if ($users->isEmpty()) {
@@ -34,12 +36,14 @@ class SearchController extends Controller
         $keyword = $request->input('keyword');
 
         $template = Template::where('id', 'like', '%' . $keyword . '%')
-            ->orWhere('notification', 'like', '%' . $keyword . '%')
-            ->orWhere('content', 'like', '%' . $keyword . '%')
+            ->orWhere('timer', 'like', '%' . $keyword . '%')
+            ->orWhere('type', 'like', '%' . $keyword . '%')
+            ->orWhere('data', 'like', '%' . $keyword . '%')
+            ->orWhere('event_id', 'like', '%' . $keyword . '%')
             ->get();
 
         if ($template->isEmpty()) {
-            return response()->json(['error' => 'No users found.'], 404);
+            return response()->json(['error' => 'No template found.'], 404);
         }
 
         return response()->json(['template' => $template], 200);
@@ -51,11 +55,12 @@ class SearchController extends Controller
         $logs = Logs::where('id', 'like', '%' . $keyword . '%')
             ->orWhere('user_id', 'like', '%' . $keyword . '%')
             ->orWhere('senddate', 'like', '%' . $keyword . '%')
-            ->orWhere('status_id', 'like', '%' . $keyword . '%')
+            ->orWhere('event_id', 'like', '%' . $keyword . '%')
+            ->orWhere('sent', 'like', '%' . $keyword . '%')
             ->get();
 
         if ($logs->isEmpty()) {
-            return response()->json(['error' => 'No users found.'], 404);
+            return response()->json(['error' => 'No logs found.'], 404);
         }
 
         return response()->json(['logs' => $logs], 200);
@@ -73,7 +78,7 @@ class SearchController extends Controller
             ->get();
 
         if ($failed->isEmpty()) {
-            return response()->json(['error' => 'No users found.'], 404);
+            return response()->json(['error' => 'No failed found.'], 404);
         }
 
         return response()->json(['failed' => $failed], 200);
@@ -88,7 +93,7 @@ class SearchController extends Controller
             ->get();
 
         if ($event->isEmpty()) {
-            return response()->json(['error' => 'No users found.'], 404);
+            return response()->json(['error' => 'No event found.'], 404);
         }
 
         return response()->json(['event' => $event], 200);
