@@ -28,6 +28,7 @@ $router->get('/pagintion-user', 'PaginationController@PagintionUser');
 $router->get('/pagintion-template', 'PaginationController@PagintionTemplate');
 $router->get('/pagintion-logs', 'PaginationController@PagintionLogs');
 $router->get('/pagintion-event', 'PaginationController@PagintionEvent');
+$router->get('/pagintion-failed', 'PaginationController@PagintionFailed');
 
 //user
 $router->get('/read-users', 'UserController@readUser');
@@ -35,6 +36,7 @@ $router->post('/create-user', 'UserController@createUser');
 $router->delete('/delete-user', 'UserController@deleteUser');
 $router->put('update-user', 'UserController@updateUser');
 $router->get('/search-user', 'UserController@searchUsers');
+$router->get('find-user', 'UserController@findId');
 
 //logs
 $router ->get('/read-logs', 'LogsController@read');
