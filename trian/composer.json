@@ -9,8 +9,10 @@
         "flipbox/lumen-generator": "^9.2",
         "guzzlehttp/guzzle": "^7.8",
         "illuminate/mail": "^8.83",
+        "illuminate/validation": "^8.83",
         "laravel/lumen-framework": "^8.3.1",
         "nesbot/carbon": "^2.71",
+        "symfony/mailer": "^6.1",
         "vlucas/phpdotenv": "^5.5",
         "wildbit/swiftmailer-postmark": "^3.4"
     },

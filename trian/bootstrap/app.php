@@ -70,6 +70,10 @@ $app->alias('mail.manager', Illuminate\Contracts\Mail\Factory::class);
 $app->alias('mailer', Illuminate\Mail\Mailer::class);
 $app->alias('mailer', Illuminate\Contracts\Mail\Mailer::class);
 $app->alias('mailer', Illuminate\Contracts\Mail\MailQueue::class);
+
+// // validation User phone
+// $app->register(Illuminate\Validation\ValidationServiceProvider::class);
+
 /*
 |--------------------------------------------------------------------------
 | Register Middleware
