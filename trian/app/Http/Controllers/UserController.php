@@ -10,8 +10,8 @@ class UserController extends Controller
 {
     public function readUser()
     {
-        $users = User::all();
-        return response()->json($users);
+        $users = User::paginate(5);
+        return response()->json(['users' => $users], 200);
     }
 
     public function createUser(Request $request)

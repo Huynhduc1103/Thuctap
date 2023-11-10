@@ -27,6 +27,7 @@ class LogsController extends Controller
             'user_id' => $request->input('user_id'),
             'senddate' => $request->input('senddate'),
             'event_id' => $request->input('event_id'),
+            'sent' => $request->input('sent')
         ]);
         return response()->json($log);
     }
@@ -37,7 +38,7 @@ class LogsController extends Controller
             'user_id' => $request->input('user_id'),
             'senddate' => $request->input('senddate'),
             'event_id' => $request->input('event_id'),
-            'sent' => $request->input('sent'),
+            'sent' => $request->input('sent')
         ]);
         return response()->json($log);
     }

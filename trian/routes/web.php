@@ -17,73 +17,53 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->get('testmail', 'ExampleController@testmail');
-$router->get('sendall', 'ExampleController@sendall');
-$router->get('read', 'indexcontroller@read');
-$router->get('find', 'indexcontroller@findId');
-$router->post('create', 'indexcontroller@create');
-$router->put('update/{id}', 'indexcontroller@update');
-$router->delete('delete/{id}', 'indexcontroller@delete');
-
-
-$router->get('/searchuser', 'SearchController@searchByUser');
-$router->get('/searchtemplate', 'SearchController@searchByTemplade');
-$router->get('/searchevent', 'SearchController@searchByEvent');
-$router->get('/searchlogs', 'SearchController@searchByLogs');
-$router->get('/searchfailed', 'SearchController@searchByFailed');
+$router->get('/search-user', 'SearchController@searchByUser');
+$router->get('/search-template', 'SearchController@searchByTemplade');
+$router->get('/search-event', 'SearchController@searchByEvent');
+$router->get('/search-logs', 'SearchController@searchByLogs');
+$router->get('/search-failed', 'SearchController@searchByFailed');
 $router->get('/search', 'SearchController@searchAll');
 
-$router->get('/pagintionuser', 'PaginationController@PagintionUser');
-$router->get('/pagintiontemplate', 'PaginationController@PagintionTemplate');
-$router->get('/pagintionmessage', 'PaginationController@PagintionMessage');
-$router->get('/pagintionlogs', 'PaginationController@PagintionLogs');
-$router->get('/pagintionevent', 'PaginationController@PagintionEvent');
-
-
-$router->get('/sendsms', 'sendSMS@sendSms');
-
+$router->get('/pagintion-user', 'PaginationController@PagintionUser');
+$router->get('/pagintion-template', 'PaginationController@PagintionTemplate');
+$router->get('/pagintion-logs', 'PaginationController@PagintionLogs');
+$router->get('/pagintion-event', 'PaginationController@PagintionEvent');
 
 //user
-$router->get('/readuser', 'UserController@readUser');
-$router->post('/createuser', 'UserController@createUser');
-$router->delete('/deleteuser/{id}', 'UserController@deleteUser');
-$router->put('updateuser/{id}', 'UserController@updateUser');
-$router->get('/searchuser', 'UserController@searchUsers');
+$router->get('/read-user', 'UserController@readUser');
+$router->post('/create-user', 'UserController@createUser');
+$router->delete('/delete-user/{id}', 'UserController@deleteUser');
+$router->put('update-user/{id}', 'UserController@updateUser');
+$router->get('/search-user', 'UserController@searchUsers');
 
 //logs
-$router ->get('/readlogs', 'LogsController@read');
-$router ->get('/findlogs','LogsController@findId');
-$router->post('/craetelogs','LogsController@create');
-$router->put('/updatelogs/{id}','LogsController@update');
-$router->delete('/deletelogs/{id}','LogsController@delete');
+$router ->get('/read-logs', 'LogsController@read');
+$router ->get('/find-logs','LogsController@findId');
+$router->post('/craete-logs','LogsController@create');
+$router->put('/update-logs/{id}','LogsController@update');
+$router->delete('/delete-logs/{id}','LogsController@delete');
 
 //envets
-$router->get('readevent', 'EventController@read');
-$router->get('findevent', 'EventController@findId');
-$router->post('createevent', 'EventController@create');
-$router->put('updateevent/{id}', 'EventController@update');
-$router->delete('deleteevent/{id}', 'EventController@delete');
+$router->get('read-event', 'EventController@read');
+$router->get('find-event', 'EventController@findId');
+$router->post('create-event', 'EventController@create');
+$router->put('update-event/{id}', 'EventController@update');
+$router->delete('delete-event/{id}', 'EventController@delete');
 
 //template
-$router->get('readtemp', 'TemplateController@read');
-$router->get('findtemp', 'TemplateController@findId');
-$router->post('createtemp', 'TemplateController@create');
-$router->put('updatetemp/{id}', 'TemplateController@update');
-$router->delete('deletetemp/{id}', 'TemplateController@delete');
-
-//message
-$router->get('/readMessage', 'MessageController@readMessage');
-$router->post('/createMessage', 'MessageController@createMessage');
-$router->delete('/deleteMessage/{id}', 'MessageController@deleteMessage');
-$router->put('updateMessage/{id}', 'MessageController@updateMessage');
-
+$router->get('read-temp', 'TemplateController@read');
+$router->get('find-temp/{id}', 'TemplateController@findId');
+$router->post('create-temp', 'TemplateController@create');
+$router->put('update-temp/{id}', 'TemplateController@update');
+$router->delete('delete-temp/{id}', 'TemplateController@delete');
 
 //failed
-$router->get('/readFailed', 'FailedController@readFailed');
-$router->post('/createFailed', 'FailedController@createFailed');
-$router->delete('/deleteFailed/{id}', 'FailedController@deleteFailed');
-$router->put('updateFailed/{id}', 'FailedController@updateFailed');
+$router->get('/read-failed', 'FailedController@readFailed');
+$router->post('/create-failed', 'FailedController@createFailed');
+$router->get('find-failed/{id}', 'FailedController@findId');
+$router->delete('/delete-failed/{id}', 'FailedController@deleteFailed');
+$router->put('update-failed/{id}', 'FailedController@updateFailed');
 
-$router->get('sendlistup', 'ExampleController@sendlistup'); 
+$router->get('send-list-up', 'ExampleController@sendlistup'); 
 $router->get('retry', 'retrycontroller@retry');
-$router->get('sendtype', 'sendType@sendType'); // hang loat theo loai
+$router->get('send-type', 'sendType@sendType'); // hang loat theo loai

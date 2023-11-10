@@ -56,8 +56,8 @@ class ExampleController extends Controller
         }
         if ($obj['CodeResult'] == 100) {
             $logs = Logs::where('user_id', $user->id)
-            ->where('event_id', $event->id)
-            ->first();
+                ->where('event_id', $event->id)
+                ->first();
             if (empty($logs)) {
                 Logs::create([
                     'user_id' => $user->id,
@@ -70,7 +70,7 @@ class ExampleController extends Controller
                     'sent' => $logs->sent . ' - SMS'
                 ]);
             }
-            
+
             echo "Gửi thành công";
         } else {
             Failed::create([
@@ -95,8 +95,8 @@ class ExampleController extends Controller
                 $email->to($user->email, $name, $eventdate);
             });
             $logs = Logs::where('user_id', $user->id)
-            ->where('event_id', $event->id)
-            ->first();
+                ->where('event_id', $event->id)
+                ->first();
             if (empty($logs)) {
                 Logs::create([
                     'user_id' => $user->id,
@@ -106,17 +106,16 @@ class ExampleController extends Controller
                 ]);
             } else {
                 $logs->update([
-                    'sent' => 'EMAIL - '.$logs->sent
+                    'sent' => 'EMAIL - ' . $logs->sent
                 ]);
             }
-            
         } catch (Exception $e) {
             Failed::create([
                 'user_id' => $user->id,
                 'date' => Carbon::now()->format('Y-m-d'),
                 'event_id' => $event->id,
                 'type' => 'EMAIL',
-                'error'=> $e->getMessage()
+                'error' => $e->getMessage()
             ]);
             // Xử lý ngoại lệ khi không thể gửi email
             echo response()->json(['message' => 'Không thể gửi email']);
@@ -128,8 +127,13 @@ class ExampleController extends Controller
         $event = Event::find($request->input('id'));
         $users = User::all();
         foreach ($users as $user) {
-            ExampleController::email($user, $event);
-            ExampleController::sms($user, $event);
+            $logs = Logs::where('user_id', $user->id)
+                ->where('event_id', $event->id)
+                ->first();
+            if (empty($logs)) {
+                ExampleController::email($user, $event);
+                ExampleController::sms($user, $event);
+            }
         }
     }
 
