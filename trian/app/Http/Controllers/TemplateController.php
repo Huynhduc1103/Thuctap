@@ -35,7 +35,7 @@ class TemplateController extends Controller
                 'email' => 'Trường :attribute phải là địa chỉ email hợp lệ.',
                 'unique' => 'Trường :attribute đã tồn tại.',
                 'exists' => 'Trường :attribute không hợp lệ.',
-                'date_format' => 'Trường :attribute không đúng định dạng Y-m-d'
+                'date_format' => 'Trường :attribute không đúng định dạng Y-m-d H:i'
             ]
         );
         if ($validator->fails()) {
@@ -70,7 +70,7 @@ class TemplateController extends Controller
             $type = 'USER';
         } elseif ($totalItems >= 2) {
             $type = 'GROUP';
-        } 
+        }
         // Tiến hành thêm dữ liệu
         $template = Template::create([
             'timer' => $timer,
@@ -82,9 +82,9 @@ class TemplateController extends Controller
     }
 
 
-    public function update($id, Request $request)
+    public function update(Request $request)
     {
-        $template = Template::find($id);
+        $template = Template::find($request->input('id'));
         if (empty($template)) {
             return response()->json(['error' => 'Template không tồn tại.'], 404);
         }
@@ -107,52 +107,59 @@ class TemplateController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
         $timer = $request->input('timer'); // Không được lấy ngày giờ hiện tại nghen
-        $data = $request->input('data');
+        $list = $request->input('data');
         $event_id = $request->input('event_id');
         $currentTime = Carbon::now();
         $inputTime = Carbon::createFromFormat('Y-m-d H:i', $timer);
         if ($inputTime->diffInMinutes($currentTime) <= 30 || $inputTime->isPast()) {
             return response()->json(['error' => 'Thời gian phải sau 30 phút so với thời gian hiện tại.'], 422);
         }
-        // Tự động xác định giá trị cho trường "type" dựa trên dữ liệu
-        $dataArray = explode(',', $data);
-        if (count($dataArray) == 1) {
+        $dataArray = explode(',', $list);
+        $users = User::WhereIn('id', $dataArray)->get();
+        $totalItems = count($users);
+        $counter = 0;
+        $data = "";
+        foreach ($users as $user) {
+            $data = $data . $user->id;
+            if (++$counter < $totalItems) {
+                $data = $data . ',';
+            }
+        }
+        if ($totalItems == 1) {
             $type = 'USER';
-        } elseif (count($dataArray) >= 2) {
+        } elseif ($totalItems >= 2) {
             $type = 'GROUP';
         }
-
-        // Cập nhật dữ liệu cho sự kiện có ID tương ứng
-        $template->timer = $timer;
-        $template->type = $type;
-        $template->data = $data;
-        $template->event_id = $event_id;
-        $template->save();
-
+        $template->update([
+            'timer' => $timer,
+            'data' => $data,
+            'type' => $type,
+            'event_id' => $event_id
+        ]);
         return response()->json($template);
     }
 
 
-    public function findId($id)
-    {    
-        $template = Template::find($id);
-        if(empty($template)) {
-            return response()->json(['error'=> 'Template không tồn tại.'],404);
+    public function findId(Request $request)
+    {
+        $template = Template::find($request->input('id'));
+        if (empty($template)) {
+            return response()->json(['error' => 'Template không tồn tại.'], 404);
         }
         return response()->json($template);
     }
 
-    public function delete($id)
+    public function delete(Request $request)
     {
-        $template = Template::find($id);
-        if(empty($template)) {
-            return response()->json(['error'=> 'Template không tồn tại.'],404);
+        $template = Template::find($request->input('id'));
+        if (empty($template)) {
+            return response()->json(['error' => 'Template không tồn tại.'], 404);
         }
         try {
             // Xóa 
             $template->delete();
             // Xóa thành công
-            return response()->json(['message' => 'Template ' . $id . ' đã được xóa thành công']);
+            return response()->json(['message' => 'Template ' . $template->id . ' đã được xóa thành công']);
         } catch (\Exception $e) {
             // Xử lý lỗi nếu có
             return response()->json(['message' => 'Lỗi xóa template: ' . $e->getMessage()], 500);
