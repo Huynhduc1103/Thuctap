@@ -37,23 +37,31 @@ class EventController extends Controller
             return response()->json(['error' => 'Sự kiện không tồn tại.'], 404);
         }
         // bỏ trống
+        $eventIdToUpdate = $request->input('event_id');
+
+        $eventIdToUpdate = $request->input('event_id');
+
         $validator = Validator::make(
             $request->all(),
             [
-                'eventname' => 'required',
+                'eventname' => 'required|unique:events,eventname,' . $eventIdToUpdate . ',id,eventdate,' . $request->input('eventdate'),
                 'eventdate' => 'required|date_format:Y-m-d|after:' . Carbon::now()->format('Y-m-d'),
             ],
             [
-                'required' => 'Trường :attribute không được để trống.',
-                'after' => 'Trường :attribute phải lớn hơn ngày hiện tại.',
-                'date_format' => 'Trường :attribute không đúng định dạng Y-m-d.',
-
-                // Thêm các thông báo lỗi tùy chỉnh cho các quy tắc validation khác nếu cần
+                'eventname.required' => 'Tên sự kiện không được để trống.',
+                'eventname.unique' => 'Sự kiện này đã tồn tại trong cơ sở dữ liệu cho ngày đã chọn.',
+                'eventdate.required' => 'Ngày diễn ra sự kiện không được để trống.',
+                'eventdate.after' => 'Ngày diễn ra sự kiện phải lớn hơn ngày hiện tại.',
+                'eventdate.date_format' => 'Ngày diễn ra sự kiện không đúng định dạng Y-m-d.',
             ]
         );
+
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 422);
         }
+
+
+
         $eventname = $request->input('eventname');
         $eventdate = $request->input('eventdate');
         $event->update([
@@ -70,13 +78,15 @@ class EventController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'eventname' => 'required',
+                'eventname' => 'required|unique:events,eventname,NULL,id,eventdate,' . $request->input('eventdate'),
                 'eventdate' => 'required|date_format:Y-m-d|after:' . Carbon::now()->format('Y-m-d'),
             ],
             [
-                'required' => 'Trường :attribute không được để trống.',
-                'after' => 'Trường :attribute phải lớn hơn ngày hiện tại.',
-                'date_format' => 'Trường :attribute phải là ngày không để hợp lệ Y-m-d.'
+                'eventname.required' => 'Tên sự kiện không được để trống.',
+                'eventname.unique' => 'Sự kiện này đã tồn tại trong cơ sở dữ liệu cho ngày đã chọn.',
+                'eventdate.required' => 'Ngày diễn ra sự kiện không được để trống.',
+                'eventdate.after' => 'Ngày diễn ra sự kiện phải lớn hơn ngày hiện tại.',
+                'eventdate.date_format' => 'Ngày diễn ra sự kiện không đúng định dạng Y-m-d.',
             ]
         );
         if ($validator->fails()) {

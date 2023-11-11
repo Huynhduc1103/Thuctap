@@ -40,7 +40,6 @@ class FailedController extends Controller
             'type.in' => 'Trường type chỉ được là EMAIL hoặc SMS.',
             'error.required' => 'Trường error không được để trống.',
         ];
-
         $validator = Validator::make($request->all(), [
             'user_id' => 'required|exists:users,id',
             'date' => 'required|date_format:Y-m-d|date_equals:' . Carbon::now()->format('Y-m-d'),
@@ -134,7 +133,7 @@ class FailedController extends Controller
         $id = $request->id;
         $failed = Failed::find($id);
         if (empty($failed)) {
-            return response()->json(['message' => 'Không tìm thấy failed.'], 404);
+            return response()->json(['message' => 'Không tìm thấy Failed.'], 404);
         }
         return response()->json($failed);
     }

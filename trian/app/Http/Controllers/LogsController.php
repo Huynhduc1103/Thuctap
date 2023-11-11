@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Logs;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -22,148 +24,95 @@ class LogsController extends Controller
 
     public function findId(Request $request)
     {
-        try {
-            $id = $request->input('id');
-            $log = Logs::find($id);
-
-            if ($log) {
-                return response()->json($log, 200);
-            } else {
-                return response()->json(['message' => 'Không tìm thấy log ' . $id], 404);
-            }
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Có lỗi xảy ra: ' . $e->getMessage()], 500);
+        $id = $request->input('id');
+        $log = Logs::find($id);
+        if (empty($log)) {
+            return response()->json(['message' => 'Không tìm thấy Logs.'], 404);
         }
+        return response()->json($log, 200);
     }
 
-    public function update( Request $request)
+    public function update(Request $request)
     {
-        try {
-            $id = $request->input('id');
-            $log = Logs::find($id);
-    
-            if ($log) {
-                $validator = Validator::make($request->all(), [
-                    'user_id' => 'required',
-                    'senddate' => 'required|date_format:Y-m-d',
-                    'event_id' => ['required', Rule::exists('events', 'id')],
-                    'sent' => 'required',
-                ], [
-                    'user_id.required' => 'Vui lòng nhập userId',
-                    'senddate.date_format' => 'Định dạng ngày không đúng.',
-                    'event_id.exists' => 'Event ID không tồn tại.',
-                    'required' => 'Vui lòng nhập đầy đủ thông tin',
-                    'senddate.required' => 'Vui lòng nhập ngày gửi',
-                    'event_id.required' => 'Vui lòng nhập id của event',
-                    'sent.required' => 'Vui lòng nhập cách gửi'
-                ]);
-                
-                if ($validator->fails()) {
-                    $errors = $validator->errors();
-                    $errorMessages = [];
-                
-                    if ($errors->has('user_id')) {
-                        $errorMessages['user_id'] = $errors->first('user_id');
-                    }
-                
-                    if ($errors->has('senddate')) {
-                        $errorMessages['senddate'] = $errors->first('senddate');
-                    }
-                
-                    if ($errors->has('event_id')) {
-                        $errorMessages['event_id'] = $errors->first('event_id');
-                    }
-                
-                    if ($errors->has('sent')) {
-                        $errorMessages['sent'] = $errors->first('sent');
-                    }
-                
-                    return response()->json(['message' => $errorMessages], 400);
-                }
-    
-                $log->update([
-                    'user_id' => $request->input('user_id'),
-                    'senddate' => $request->input('senddate'),
-                    'event_id' => $request->input('event_id'),
-                    'sent' => $request->input('sent'),
-                ]);
-    
-                return response()->json($log, 200);
-            } else {
-                return response()->json(['message' => 'Không tìm thấy log ' . $id], 404);
-            }
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Có lỗi xảy ra: Logs chưa được chỉnh sửa.'. $e->getMessage()], 500);
+        $log = Logs::find($request->id);
+        if (empty($log)) {
+            return response()->json(['message' => 'Logs không tồn tại trong hệ thống.'], 404);
         }
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required|exists:users,id',
+            'senddate' => 'required|date_format:Y-m-d|date_equals:' . Carbon::now()->format('Y-m-d'),
+            'event_id' => 'required|exists:events,id',
+            'sent' => 'required',
+        ], [
+            'user_id.required' => 'Trường user_id là bắt buộc.',
+            'user_id.exists' => 'Giá trị của user_id không tồn tại trong cơ sở dữ liệu.',
+            'senddate.required' => 'Trường senddate là bắt buộc.',
+            'senddate.date_format' => 'Định dạng của trường senddate phải là Y-m-d.',
+            'senddate.date_equals' => 'Trường senddate phải bằng ngày hiện tại.',
+            'event_id.required' => 'Trường event_id là bắt buộc.',
+            'event_id.exists' => 'Giá trị của event_id không tồn tại trong cơ sở dữ liệu.',
+            'sent.required' => 'Trường sent là bắt buộc.',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
+        $existingRecord = DB::table('logs')
+            ->where('user_id', $request->input('user_id'))
+            ->where('event_id', $request->input('event_id'))
+            ->first();
+
+        if ($existingRecord) {
+            // Trả về lỗi vì kết hợp đã tồn tại
+            return response()->json(['error' => 'Đã tồn tại người dùng, sự kiện này.', 422]);
+        }
+        $log->update([
+            'user_id' => $request->input('user_id'),
+            'senddate' => $request->input('senddate'),
+            'event_id' => $request->input('event_id'),
+            'sent' => $request->input('sent'),
+        ]);
+        return response()->json($log, 200);
     }
 
     public function create(Request $request)
     {
-        try {
-            $validator = Validator::make($request->all(), [
-                'user_id' => 'required',
-                'senddate' => 'required|date_format:Y-m-d',
-                'event_id' => ['required', Rule::exists('events', 'id')],
-                'sent' => 'required',
-            ], [
-                'user_id.required' => 'Vui lòng nhập userId',
-                'senddate.date_format' => 'Định dạng ngày không đúng.',
-                'event_id.exists' => 'Event ID không tồn tại.',
-                'required' => 'Vui lòng nhập đầy đủ thông tin',
-                'senddate.required' => 'Vui lòng nhập ngày gửi',
-                'event_id.required' => 'Vui lòng nhập id của event',
-                'sent.required' => 'Vui lòng nhập cách gửi'
-            ]);
-            
-            if ($validator->fails()) {
-                $errors = $validator->errors();
-                $errorMessages = [];
-            
-                if ($errors->has('user_id')) {
-                    $errorMessages['user_id'] = $errors->first('user_id');
-                }
-            
-                if ($errors->has('senddate')) {
-                    $errorMessages['senddate'] = $errors->first('senddate');
-                }
-            
-                if ($errors->has('event_id')) {
-                    $errorMessages['event_id'] = $errors->first('event_id');
-                }
-            
-                if ($errors->has('sent')) {
-                    $errorMessages['sent'] = $errors->first('sent');
-                }
-            
-                return response()->json(['message' => $errorMessages], 400);
-            }
-
-            $log = Logs::create([
-                'user_id' => $request->input('user_id'),
-                'senddate' => $request->input('senddate'),
-                'event_id' => $request->input('event_id'),
-                'sent' => $request->input('sent'),
-            ]);
-
-            return response()->json($log, 200);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Có lỗi xảy ra: ' . $e->getMessage()], 500);
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required|exists:users,id|unique:logs,user_id,NULL,id,event_id,' . $request->input('event_id'),
+            'senddate' => 'required|date_format:Y-m-d|date_equals:' . Carbon::now()->format('Y-m-d'),
+            'event_id' => 'required|exists:events,id|unique:logs,event_id,NULL,id,user_id,' . $request->input('user_id'),
+            'sent' => 'required',
+        ], [
+            'user_id.required' => 'Trường user_id là bắt buộc.',
+            'user_id.exists' => 'Giá trị của user_id không tồn tại trong cơ sở dữ liệu.',
+            'user_id.unique' => 'Giá trị của user_id và event_id đã tồn tại trong bảng logs.',
+            'senddate.required' => 'Trường senddate là bắt buộc.',
+            'senddate.date_format' => 'Định dạng của trường senddate phải là Y-m-d.',
+            'senddate.date_equals' => 'Trường senddate phải bằng ngày hiện tại.',
+            'event_id.required' => 'Trường event_id là bắt buộc.',
+            'event_id.exists' => 'Giá trị của event_id không tồn tại trong cơ sở dữ liệu.',
+            'event_id.unique' => 'Giá trị của user_id và event_id đã tồn tại trong bảng logs.',
+            'sent.required' => 'Trường sent là bắt buộc.',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
         }
+        $log = Logs::create([
+            'user_id' => $request->input('user_id'),
+            'senddate' => $request->input('senddate'),
+            'event_id' => $request->input('event_id'),
+            'sent' => $request->input('sent'),
+        ]);
+        return response()->json($log, 200);
     }
 
-    public function delete($id)
+    public function delete(Request $request)
     {
-        $log = Logs::find($id);
-
-        if ($log) {
-            try {
-                $log->delete();
-                return response()->json(['message' => 'Log ' . $id . ' đã được xóa thành công']);
-            } catch (\Exception $e) {
-                return response()->json(['message' => 'Lỗi xóa log: ' . $e->getMessage()], 500);
-            }
-        } else {
-            return response()->json(['message' => 'Không tìm thấy log có ID ' . $id], 404);
+        $log = Logs::find($request->id);
+        if (empty($log)) {
+            return response()->json(['message' => 'Không tồn tại Logs trong hệ thống.'], 404);
         }
+        $log->delete();
+        return response()->json(['message' => 'Đã xóa Logs có id ' . $log->id . '.'], 200);
     }
 }

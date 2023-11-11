@@ -116,10 +116,6 @@ class UserController extends Controller
             return response()->json(['error' => $validator->errors()], 404);
         }
 
-        if (!$user) {
-            return response()->json(['error' => 'Người dùng không tồn tại.']);
-        }
-
         $user->update($data);
         return response()->json(['success' => 'Thông tin người dùng đã được cập nhật.']);
     }
