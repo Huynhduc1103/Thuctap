@@ -72,7 +72,7 @@ class FailedController extends Controller
             'user_id.exists' => 'User không tồn tại trong hệ thống.',
             'date.required' => 'Trường date không được để trống.',
             'date.date' => 'Trường date phải là một ngày hợp lệ.',
-            'date.same' => 'Ngày phải bằng với ngày hiện tại.',
+            'date_equals' => 'Ngày phải bằng với ngày hiện tại.',
             'event_id.required' => 'Trường event_id không được để trống.',
             'event_id.exists' => 'Event không tồn tại trong hệ thống.',
             'type.required' => 'Trường type không được để trống.',

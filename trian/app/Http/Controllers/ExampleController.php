@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Swift_TransportException;
 
 class ExampleController extends Controller
@@ -139,11 +140,27 @@ class ExampleController extends Controller
 
     public function sendlistup(Request $request)
     {
+        // check null
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'user_id' => 'required',
+                'event_id' => 'required|exists:events,id'
+            ],
+            [
+                'required' => 'Trường :attribute không được để trống.',
+                'exists' => 'Trường :attribute không hợp lệ.'
+            ]
+        );
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
         $list = $request->input('user_id');
         $event = Event::find($request->input('event_id'));
+
         $listuser = explode(',', $list);
-        for ($i = 0; $i < count($listuser); $i++) {
-            $user = User::find($listuser[$i]);
+        $users = User::WhereIn('id', $listuser)->get();
+        foreach ($users as $user) {
             ExampleController::email($user, $event);
             ExampleController::sms($user, $event);
         }
