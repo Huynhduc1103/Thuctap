@@ -165,4 +165,38 @@ class ExampleController extends Controller
             ExampleController::sms($user, $event);
         }
     }
+
+    public function sendNow(Request $request) {
+         // check null
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'user_id' => 'required',
+                'event_id' => 'required|exists:events,id'
+            ],
+            [
+                'required' => 'Trường :attribute không được để trống.',
+                'exists' => 'Trường :attribute không hợp lệ.'
+            ]
+        );
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
+        $event = Event::find($request->input('event_id'));
+        $list = explode(',', $request->input('user_id'));
+        $listusers = [];
+        for ($i = 0; $i < count($list); $i++) {
+            $user = User::find($list[$i]);
+            if(empty($user)){
+                return response()->json(['error'=> 'Có User không tồn tại trong hệ thống!'],404);
+            } else {
+                array_push($listusers, $user->id);
+            }
+        }
+        $users = User::WhereIn('id', $listusers)->get();
+        foreach( $users as $user) {
+            ExampleController::email($user, $event);
+            ExampleController::sms($user, $event);
+        }
+    }
 }

@@ -26,9 +26,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        
-        $schedule->command('message:birthday')->everyMinute()->withoutOverlapping();
-        //->dailyAt('07:00')->withoutOverlapping();
+        $schedule->command('message:birthday')->dailyAt('07:00')->withoutOverlapping();
+        //->everyMinute()->withoutOverlapping();
         $schedule->command('message:event')->everyMinute()->withoutOverlapping();
         $schedule->command('failed:send')->everyMinute()->withoutOverlapping();
     }

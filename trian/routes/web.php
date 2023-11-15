@@ -67,5 +67,6 @@ $router->delete('/delete-failed', 'FailedController@deleteFailed');
 $router->put('update-failed', 'FailedController@updateFailed');
 
 $router->get('send-list-up', 'ExampleController@sendlistup');
+$router->get('send-now', 'ExampleController@sendNow');
 $router->get('retry', 'retrycontroller@retry');
 $router->get('send-type', 'sendType@sendType'); // hang loat theo loai
