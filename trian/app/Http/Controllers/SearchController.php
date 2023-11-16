@@ -10,52 +10,61 @@ use App\Models\Template;
 use App\Models\Status;
 use App\Models\Message;
 use App\Models\Logs;
+use Illuminate\Pagination\Paginator;
 
 class SearchController extends Controller
 {
 
     public function searchAll(Request $request)
-{
-    $keyword = $request->input('keyword');
+    {
+        $keyword = $request->input('keyword');
+        $perPage = $request->input('per_page', 5);
+        $results = [];
 
-    $results = [];
+        // Search in User table
+        $users = $this->searchByUser($request);
+        if ($users->getStatusCode() === 200) {
+            $results['users'] = $users->getData(true)['users'];
+        }
 
-    // Search in User table
-    $users = $this->searchByUser($request);
-    if ($users->getStatusCode() === 200) {
-        $results['users'] = $users->getData(true)['users'];
+        // Search in Template table
+        $templates = $this->searchByTemplade($request);
+        if ($templates->getStatusCode() === 200) {
+            $results['templates'] = $templates->getData(true)['template'];
+        }
+
+        // Search in Logs table
+        $logs = $this->searchByLogs($request);
+        if ($logs->getStatusCode() === 200) {
+            $results['logs'] = $logs->getData(true)['logs'];
+        }
+
+        // Search in Failed table
+        $failed = $this->searchByFailed($request);
+        if ($failed->getStatusCode() === 200) {
+            $results['failed'] = $failed->getData(true)['failed'];
+        }
+
+        // Search in Event table
+        $events = $this->searchByEvent($request);
+        if ($events->getStatusCode() === 200) {
+            $results['events'] = $events->getData(true)['event'];
+        }
+
+        if (empty($results)) {
+            return response()->json(['error' => 'No results found.'], 404);
+        }
+        // Combine the results into a single array
+        $mergedResults = collect($results)->flatMap(function ($result) {
+            return $result;
+        });
+
+        // Paginate the merged results
+        $paginatedResults = new Paginator($mergedResults, $perPage);
+        $paginatedResults->withPath($request->url()); // Để giữ nguyên URL khi chuyển trang
+
+        return response()->json($paginatedResults, 200);
     }
-
-    // Search in Template table
-    $templates = $this->searchByTemplade($request);
-    if ($templates->getStatusCode() === 200) {
-        $results['templates'] = $templates->getData(true)['template'];
-    }
-
-    // Search in Logs table
-    $logs = $this->searchByLogs($request);
-    if ($logs->getStatusCode() === 200) {
-        $results['logs'] = $logs->getData(true)['logs'];
-    }
-
-    // Search in Failed table
-    $failed = $this->searchByFailed($request);
-    if ($failed->getStatusCode() === 200) {
-        $results['failed'] = $failed->getData(true)['failed'];
-    }
-
-    // Search in Event table
-    $events = $this->searchByEvent($request);
-    if ($events->getStatusCode() === 200) {
-        $results['events'] = $events->getData(true)['event'];
-    }
-
-    if (empty($results)) {
-        return response()->json(['error' => 'No results found.'], 404);
-    }
-
-    return response()->json($results, 200);
-}
 
     public function searchByUser(Request $request)
     {
